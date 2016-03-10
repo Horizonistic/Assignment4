@@ -17,9 +17,9 @@ struct Bike
     int size;
     float cost_per_day;
     bool deleted; //to mark bike as deleted in the list.
-    Bike *next_manuf; //pointer to next node in the manufacturers list
-    Bike *next_id; //pointer to the next node in the list by ID
-    Bike *next; //pointer to the next node in the general list
+    Bike* next_manuf; //pointer to next node in the manufacturers list
+    Bike* next_id; //pointer to the next node in the list by ID
+    Bike* next; //pointer to the next node in the general list
 };
 
 class Bikes
@@ -48,32 +48,6 @@ void readBike(fstream &, Bike*& head, Bike*& manuf, Bike*& id);
  * This function is overloaded with two other functions below
 */
 Bike * addBike(Bike* head, Bike* new_bike);
-
-
-/*
- * addBike:- (optional)
- *
- * Purpose: Overloaded function to add bike to the list, sorted by ID.
- *
- * Note, that you have only one set of nodes. You will need to implement different
- *
- * lists by different sets of pointers.
- * * + 5 extra points.
-*/
-Bike * addBike(Bike * head_id, Bike * new_bike, order);
-
-
-/*
- * *addBike:- (optional)
- *
- * *Purpose: Overloaded function to add bike to the list, sorted by the manufacturer.
- *
- * *Note that the last parameter is just a placeholder to tell compiler to call this
- *
- * *overloaded function. you can pass any value there, it is not used in the function.
- * *+ 5 extra points
-*/
-Bike * addBike(Bike * head_manufacturer, Bike * new_bike, order, int);
 
 
 /*

@@ -7,5 +7,5 @@ using namespace std;
 
 int main()
 {
-    Bikes * bikes = new Bikes();
+    Bikes* bikes = new Bikes();
 }

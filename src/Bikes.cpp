@@ -14,16 +14,6 @@ Bike * Bikes::addBike(Bike* head, Bike* new_bike)
     // TODO
 }
 
-Bike * Bikes::addBike(Bike * head_id, Bike * new_bike, order)
-{
-    // TODO
-}
-
-Bike * Bikes::addBike(Bike * head_manufacturer, Bike * new_bike, order, int)
-{
-    // TODO
-}
-
 void Bikes::printBikes(Bike*, order, status)
 {
     // TODO
