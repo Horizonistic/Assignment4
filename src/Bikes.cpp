@@ -2,6 +2,7 @@
 // Created by Infernia on 03/03/2016.
 //
 
+#include <string.h>
 #include "Bikes.h"
 
 void Bikes::readBike(fstream &, Bike*& head, Bike*& manuf, Bike*& id)
@@ -53,10 +54,11 @@ void Bikes::init(Bike * bikePointer) {
     Bike *next; //pointer to the next node in the general list
      */
 
-    *bikePointer->manufact = {''};
+    // use strcpy
+    strcpy(bikePointer->manufact, "");
     bikePointer->id_num = 0;
     bikePointer->rented_code = NOT_RENTED;
-    *bikePointer->to_whom = {''};
+    strcpy(bikePointer->to_whom, "");
     bikePointer->size = 0;
     bikePointer->cost_per_day = 0;
     bikePointer->deleted = false;

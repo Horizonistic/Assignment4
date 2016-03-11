@@ -24,7 +24,7 @@ struct Bike
 
 class Bikes
 {
-
+public:
 /*
  * readBike:
  *
