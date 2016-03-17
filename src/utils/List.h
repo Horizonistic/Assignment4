@@ -14,6 +14,11 @@ public:
     ListNode* prev;
 };
 
+using namespace std;
+
+/*
+ * NOTE: All Nth methods are 0-based
+ */
 template<class T>
 class List
 {
@@ -22,13 +27,15 @@ public:
 
     ListNode<T>* makeNewNode(T* data);
 
-    ListNode<T> * getFirstNode();
+    ListNode<T>* getFirstNode();
     T* getFirstElement();
+    ListNode<T>* getNthNode(int n);
+    T* getNthElement(int n);
     ListNode<T>* getLastNode();
     T* getLastElement();
 
     void addFirst(T* node);
-    void addNth(T* node);
+    void addNth(int n, T* data);
     void addLast(T* data);
     void deleteFirst();
     void deleteNth(int n);
@@ -37,10 +44,12 @@ public:
     bool isEmpty();
     void clear();
     int getSize();
+    void dump();
 
 private:
     int size = 0;
     struct ListNode<T>* head = NULL;
+    struct ListNode<T>* tail = NULL;
 };
 
 template<class T>
@@ -64,6 +73,7 @@ ListNode<T>* List<T>::getFirstNode()
     {
         return NULL;
     }
+
     return this->head;
 }
 
@@ -74,81 +84,202 @@ T* List<T>::getFirstElement()
     {
         return NULL;
     }
+
     return &this->head->info;
+}
+template <class T>
+ListNode<T>* List<T>::getNthNode(int n)
+{
+    if (this->head == NULL || tail == NULL)
+    {
+        return NULL;
+    }
+
+    ListNode<T>* temp;
+
+    if (n == this->size - 1)
+    {
+        return this->tail;
+    }
+    else if (n == 0)
+    {
+        return this->head;
+    }
+    else if (n <= (this->size / 2))
+    {
+        temp = this->head;
+        int count = 0;
+
+        while (temp->next != NULL && count < n)
+        {
+            temp = temp->next;
+            count++;
+        }
+
+        return temp;
+
+    }
+    else
+    {
+        temp = this->tail;
+        int count = 0;
+
+        while (temp->prev != NULL && count < this->size - n)
+        {
+            temp = temp->prev;
+            count++;
+        }
+
+        return temp->prev;
+    }
+}
+
+template <class T>
+T* List<T>::getNthElement(int n)
+{
+    if (this->head == NULL || tail == NULL)
+    {
+        return NULL;
+    }
+
+    return &(getNthNode(n)->info);
 }
 
 template<class T>
 ListNode<T>* List<T>::getLastNode()
 {
-    ListNode<T>* temp = head;
-
-    while (temp->next != NULL)
+    if (this->tail == NULL)
     {
-        temp = temp->next;
+        return NULL;
     }
-
-    return temp;
+    else
+    {
+        return this->tail;
+    }
 }
 
 template<class T>
 T* List<T>::getLastElement()
 {
-    ListNode<T>* temp = head;
-
-    while (temp->next != NULL)
+    if (this->tail == NULL)
     {
-        temp = temp->next;
+        return NULL;
     }
-
-    return &temp->info;
+    return &this->tail->info;
 }
 
 template<class T>
 void List<T>::addFirst(T* data)
 {
     struct ListNode<T>* newNode = makeNewNode(data);
-    if (head == NULL)
+    if (this->head == NULL)
     {
-        head = newNode;
+        this->head = newNode;
         this->size++;
+
+        if (this->tail == NULL)
+        {
+            this->tail = newNode;
+            return;
+        }
         return;
     }
 
     this->head->prev = newNode;
-    newNode->next = head;
+    newNode->next = this->head;
 
     this->size++;
-    head = newNode;
+    this->head = newNode;
 }
 
 template <class T>
-void List<T>::addNth(T* node)
+void List<T>::addNth(int n, T* data)
 {
-    // TODO: Implement
-    return;
+    struct ListNode<T>* newNode = makeNewNode(data);
+
+    if (this->head == NULL)
+    {
+        this->head = newNode;
+
+        if (this->tail == NULL)
+        {
+            this->tail = newNode;
+            return;
+        }
+        this->size++;
+        return;
+    }
+
+    ListNode<T>* temp;
+
+    if (n == this->size || n == this->size + 1)
+    {
+        addLast(data);
+    }
+    else if (n == 0)
+    {
+        addFirst(data);
+    }
+    else if (n <= (this->size / 2))
+    {
+        temp = this->head;
+        int count = 0;
+
+        while (temp->next != NULL && count < n)
+        {
+            temp = temp->next;
+            count++;
+        }
+
+        newNode->next = temp;
+        temp->prev->next = newNode;
+        newNode->prev = temp->prev;
+        temp->prev = newNode;
+        this->size++;
+
+        return;
+
+    }
+    else
+    {
+        temp = this->tail;
+        int count = 0;
+
+        while (temp->prev != NULL && count < this->size - (n + 1))
+        {
+            temp = temp->prev;
+            count++;
+        }
+
+        newNode->next = temp;
+        temp->prev->next = newNode;
+        newNode->prev = temp->prev;
+        temp->prev = newNode;
+        this->size++;
+
+        return;
+    }
 }
 
 template<class T>
 void List<T>::addLast(T* data)
 {
     struct ListNode<T>* newNode = makeNewNode(data);
-    ListNode<T>* temp = head;
 
-    if (head == NULL)
+    if (this->head == NULL)
     {
-        head = newNode;
+        this->head = newNode;
+        if (tail == NULL)
+        {
+            this->tail = newNode;
+        }
         this->size++;
         return;
     }
 
-    while (temp->next != NULL)
-    {
-        temp = temp->next;
-    }
-
-    temp->next = newNode;
-    newNode->prev = temp;
-
+    this->tail->next = newNode;
+    newNode->prev = this->tail;
+    this->tail = newNode;
     this->size++;
 
     return;
@@ -173,8 +304,84 @@ void List<T>::deleteFirst()
 template <class T>
 void List<T>::deleteNth(int n)
 {
-    // TODO: Implement
-    return;
+    if (this->head == NULL)
+    {
+        return;
+    }
+
+    ListNode<T>* temp;
+
+    if (n <= (this->size / 2))
+    {
+        temp = this->head;
+        int count = 0;
+
+        while (temp->next != NULL && count < n)
+        {
+            temp = temp->next;
+            count++;
+        }
+
+        if (temp == this->tail)
+        {
+            tail = temp->prev;
+            tail->next = NULL;
+            delete temp;
+            this->size--;
+            return;
+        }
+        else if (temp == this->head)
+        {
+            head = temp->next;
+            head->prev = NULL;
+            delete temp;
+            this->size--;
+            return;
+        }
+
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
+        delete temp;
+        this->size--;
+
+        return;
+
+    }
+    else
+    {
+        temp = this->tail;
+        int count = 0;
+
+        while (temp->prev != NULL && count < this->size - n)
+        {
+            temp = temp->prev;
+            count++;
+        }
+
+        if (temp == this->tail)
+        {
+            this->tail = temp->prev;
+            this->tail->next = NULL;
+            delete temp;
+            this->size--;
+            return;
+        }
+        else if (temp == this->head)
+        {
+            this->head = temp->next;
+            this->head->prev = NULL;
+            delete temp;
+            this->size--;
+            return;
+        }
+
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
+        delete temp;
+        this->size--;
+
+        return;
+    }
 }
 
 template<class T>
@@ -225,6 +432,27 @@ template<class T>
 int List<T>::getSize()
 {
     return this->size;
+}
+
+template<class T>
+void List<T>::dump()
+{
+    if (this->head == NULL)
+    {
+        return;
+    }
+    else if (this->tail == NULL)
+    {
+        return;
+    }
+
+    ListNode<T>* temp = this->head;
+    while (temp->next != NULL)
+    {
+        cout << temp->info.id_num << ", ";
+        temp = temp->next;
+    }
+    cout << temp->info.id_num << std::endl;
 }
 
 #endif //BIKES_LIST_H
