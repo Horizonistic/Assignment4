@@ -1,7 +1,7 @@
 #ifndef BIKES_LIST_H
 #define BIKES_LIST_H
 
-#include "../Bikes.h"
+#include "Common.h"
 #include <stdlib.h>
 #include <iostream>
 
@@ -44,7 +44,8 @@ public:
     bool isEmpty();
     void clear();
     int getSize();
-    void dump();
+    void insertOrdered(T*& data, order);
+    void dump(order field);
 
 private:
     int size = 0;
@@ -435,7 +436,57 @@ int List<T>::getSize()
 }
 
 template<class T>
-void List<T>::dump()
+void List<T>::insertOrdered(T*& data, order order = NO_ORDER)
+{
+    if (order == ID)
+    {
+        ListNode<T>* temp = this->head;
+
+        if (this->size == 1)
+        {
+            if (temp->info.id_num < data->id_num)
+            {
+                addLast(data);
+                return;
+            }
+            else
+            {
+                addFirst(data);
+                return;
+            }
+        }
+
+        int count = 0;
+        while (temp->next != NULL)
+        {
+            if (temp->info.id_num >= data->id_num)
+            {
+                addNth(count - 1, data);
+                return;
+            }
+            else if (temp->info.id_num < data->id_num)
+            {
+                addNth(count, data);
+                return;
+            }
+            temp = temp->next;
+            count++;
+        }
+        return;
+    }
+    else if (order == MANUF)
+    {
+
+        return;
+    }
+    else if (order == NO_ORDER)
+    {
+        addLast(data);
+    }
+}
+
+template<class T>
+void List<T>::dump(order field)
 {
     if (this->head == NULL)
     {
@@ -447,12 +498,25 @@ void List<T>::dump()
     }
 
     ListNode<T>* temp = this->head;
-    while (temp->next != NULL)
+
+    if (field == ID)
     {
-        cout << temp->info.id_num << ", ";
-        temp = temp->next;
+        while (temp->next != NULL)
+        {
+            cout << temp->info.id_num << ", ";
+            temp = temp->next;
+        }
+        cout << temp->info.id_num << endl;
     }
-    cout << temp->info.id_num << std::endl;
+    else if (field == MANUF)
+    {
+        while (temp->next != NULL)
+        {
+            cout << temp->info.manufact << ", ";
+            temp = temp->next;
+        }
+        cout << temp->info.manufact << endl;
+    }
 }
 
 #endif //BIKES_LIST_H
