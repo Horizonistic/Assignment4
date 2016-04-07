@@ -2,8 +2,10 @@
 #define BIKES_LIST_H
 
 #include "Common.h"
+#include <cstring>
 #include <stdlib.h>
 #include <iostream>
+#include <algorithm>
 
 template<class T>
 struct ListNode
@@ -441,10 +443,9 @@ void List<T>::insertOrdered(T*& data, order order = NO_ORDER)
     if (order == ID)
     {
         ListNode<T>* temp = this->head;
-
         if (this->size == 1)
         {
-            if (temp->info.id_num < data->id_num)
+            if (temp->info.id_num <= data->id_num)
             {
                 addLast(data);
                 return;
@@ -464,18 +465,69 @@ void List<T>::insertOrdered(T*& data, order order = NO_ORDER)
                 addNth(count - 1, data);
                 return;
             }
-            else if (temp->info.id_num < data->id_num)
+            else
             {
-                addNth(count, data);
-                return;
+                temp = temp->next;
+                count++;
             }
-            temp = temp->next;
-            count++;
+        }
+
+        if (temp->next == NULL)
+        {
+            addLast(data);
         }
         return;
     }
+
+
     else if (order == MANUF)
     {
+        ListNode<T>* temp = this->head;
+
+        char names[5][25] = {};
+        addLast(data);
+
+        int count = 0;
+        do
+        {
+            std::strcpy(names[count], temp->info.manufact);
+            temp = temp->next;
+            count++;
+        }
+        while (temp != NULL);
+
+        for (int i = 0; i < count; i++)
+        {
+            std::cout << names[i] << ", ";
+        }
+
+        for ( int h = 0 ; h<j ; h++ )				// ordering using two for loops
+        {
+            for(int l=0; l<j; l++)
+            {
+
+                if(uniq[l]>uniq[l+1])				//checking if the counter value is bigger or smaller..
+                {
+                    temp = counter[l];
+                    counter[l] = counter[l+1];				//ordering of both string and int
+                    counter[l+1] = temp;
+
+                    temp_1= uniq[l];
+                    uniq[l] = uniq[l+1];
+                    uniq[l+1] = temp_1;
+
+                }
+            }
+        }
+
+
+
+
+        for (int i = 0; i < count; i++)
+        {
+            std::cout << names[i] << ", ";
+        }
+        cout << endl;
 
         return;
     }

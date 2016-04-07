@@ -31,7 +31,7 @@ int main()
             switch (integer)
             {
                 case 1:
-                    bikes->readBike(file, primary, sortedID, sortedManufacturer);
+                    bikes->readBike(file, primary, sortedManufacturer, sortedID);
                     break;
 
                 case 2:
@@ -69,6 +69,7 @@ int main()
     }
 
     sortedID->dump(ID);
+    sortedManufacturer->dump(MANUF);
 
     /*
     Bike* bike = new Bike;

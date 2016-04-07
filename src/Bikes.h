@@ -78,6 +78,15 @@ public:
         {
             id->insertOrdered(bike, ID);
         }
+
+        if (manuf->isEmpty())
+        {
+            manuf->addLast(bike);
+        }
+        else
+        {
+            manuf->insertOrdered(bike, MANUF);
+        }
     }
 
 
